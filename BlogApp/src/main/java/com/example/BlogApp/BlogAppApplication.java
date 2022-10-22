@@ -21,12 +21,12 @@ public class BlogAppApplication {
 	@Bean
 	CommandLineRunner run(PostService postService) {
 		return args -> {
-			PostDtoIn post = PostDtoIn.builder().title("Title").text("Tekst").build();
-			PostDtoIn post1 = PostDtoIn.builder().title("Title1").text("Tekst1").build();
-			PostDtoIn post2 = PostDtoIn.builder().title("Title2").text("Tekst2").build();
-			postService.create(post);
-			postService.create(post1);
-			postService.create(post2);
+//			PostDtoIn post = PostDtoIn.builder().title("Title").text("Tekst").build();
+//			PostDtoIn post1 = PostDtoIn.builder().title("Title1").text("Tekst1").build();
+//			PostDtoIn post2 = PostDtoIn.builder().title("Title2").text("Tekst2").build();
+//			postService.create(post);
+//			postService.create(post1);
+//			postService.create(post2);
 		};
 
 

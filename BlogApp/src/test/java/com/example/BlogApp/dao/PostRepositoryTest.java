@@ -13,24 +13,39 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SpringBootTest
 class PostRepositoryTest {
 
+    private static final String EXAMPLE_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  ulpa qui officia deserunt mollit anim id est laborum";
+    private static final String EXAMPLE_TITLE = "Super story";
     @Autowired
     private PostRepository postRepository;
-    private static final String EXAMPLE_TEXT ="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  ulpa qui officia deserunt mollit anim id est laborum";
-    private static final String EXAMPLE_TITLE ="Super story";
 
     @AfterEach
-    void teardown(){
+    void teardown() {
         postRepository.deleteAll();
     }
 
     @Test
-    void isShouldSelectPostByTitle(){
+    void shouldReturnPostByTitle() {
+        //given
         Post post = Post.builder()
                 .text(EXAMPLE_TEXT)
                 .title(EXAMPLE_TITLE)
                 .dateTime(LocalDateTime.now()).build();
         postRepository.save(post);
-        Post savedPost= postRepository.findByTitle(EXAMPLE_TITLE);
+
+        //when
+        Post savedPost = postRepository.findByTitle(EXAMPLE_TITLE);
+
+        //then
         assertThat(savedPost).isNotNull();
+    }
+
+    @Test
+    void saveWorks() {
+        Post post = Post.builder()
+                .text(EXAMPLE_TEXT)
+                .title(EXAMPLE_TITLE)
+                .dateTime(LocalDateTime.now()).build();
+        Post saved = postRepository.save(post);
+        assertThat(saved).isNotNull();
     }
 }

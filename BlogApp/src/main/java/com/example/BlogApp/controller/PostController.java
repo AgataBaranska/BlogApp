@@ -1,5 +1,7 @@
 package com.example.BlogApp.controller;
 
+import com.example.BlogApp.dto.input.PostDtoIn;
+import com.example.BlogApp.dto.output.PostDtoOut;
 import com.example.BlogApp.entity.Post;
 import com.example.BlogApp.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +26,13 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<Post> create(@RequestBody Post postEntry){
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/posts").toUriString());
         return ResponseEntity.created(uri).body(postService.create(postEntry));
     }
 
     @PutMapping
-    public ResponseEntity<Post> update (@RequestBody Post postEntry){
-        return ResponseEntity.ok().body(postService.update(postEntry));
+    public ResponseEntity<PostDtoOut> update(@RequestBody PostDtoIn postDtoIn){
+        return ResponseEntity.ok().body(postService.update(postDtoIn));
     }
 
     @DeleteMapping("{id}")

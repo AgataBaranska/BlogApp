@@ -1,6 +1,8 @@
 package com.example.BlogApp.service;
 
 import com.example.BlogApp.dao.PostRepository;
+import com.example.BlogApp.dto.input.PostDtoIn;
+import com.example.BlogApp.dto.output.PostDtoOut;
 import com.example.BlogApp.entity.Post;
 import com.example.BlogApp.exception.PostNotFoundException;
 import lombok.AllArgsConstructor;
@@ -39,10 +41,11 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Post update(Post postEntry) {
-        Post postToUpdate = findPostById(postEntry.getId());
-        postRepository.flush();
-        return postToUpdate;
+    public PostDtoOut update(PostDtoIn postDtoIn) {
+        Post postToUpdate = findPostById(postDtoIn.getId());
+        postToUpdate.update(postDtoIn);
+        Post updatedPost = postRepository.save(postToUpdate);
+        return updatedPost.toDtoOut();
     }
 
 

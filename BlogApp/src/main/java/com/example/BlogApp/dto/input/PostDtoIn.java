@@ -15,5 +15,5 @@ public class PostDtoIn {
     private Long id;
     private String title;
     private String text;
-    private LocalDateTime dateTime;
+
 }

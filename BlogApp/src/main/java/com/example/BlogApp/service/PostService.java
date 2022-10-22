@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PostService {
-    Page<Post> findAll(Pageable pageable);
-    Post create(Post postEntry);
+    Page<PostDtoOut> findAll(Pageable pageable);
+    PostDtoOut create(PostDtoIn PostDtoIn);
     void delete(Long id);
     PostDtoOut update(PostDtoIn postDtoIn);
 

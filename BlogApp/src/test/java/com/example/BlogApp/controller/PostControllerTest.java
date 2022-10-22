@@ -1,73 +1,65 @@
 package com.example.BlogApp.controller;
 
-import com.example.BlogApp.entity.Post;
-import com.example.BlogApp.service.PostService;
-import org.junit.jupiter.api.Disabled;
+import com.example.BlogApp.dto.input.PostDtoIn;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Disabled
+
 @SpringBootTest
+@AutoConfigureMockMvc
 class PostControllerTest {
-
+    public static final LocalDateTime POST_CREATION_DATE = LocalDateTime.of(2022, 10, 1, 2, 2, 2);
+    public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON;
+    private static final String EXAMPLE_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  ulpa qui officia deserunt mollit anim id est laborum";
+    private static final String EXAMPLE_TITLE = "Super story";
+    private static MockHttpServletRequest request;
     @Autowired
-    private PostController postController;
-
-    @Mock
-    PostService postService;
+    ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
-    private static final String EXAMPLE_TEXT ="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  ulpa qui officia deserunt mollit anim id est laborum";
-    private static final String EXAMPLE_TITLE ="Super story";
 
-@Disabled
-    @Test
-    public void contextLoads() throws Exception {
-        assertThat(postController).isNotNull();
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-    @Disabled
+
     @Test
     void getPosts() throws Exception {
-        List<Post> listPosts = new ArrayList<>();
-        listPosts.add(Post.builder()
-                .text(EXAMPLE_TEXT)
-                .title(EXAMPLE_TITLE)
-                .dateTime(LocalDateTime.now()).build());
-        listPosts.add(Post.builder()
-                .text(EXAMPLE_TEXT)
-                .title(EXAMPLE_TITLE)
-                .dateTime(LocalDateTime.now()).build());
-        Page<Post> listPostsPage = new PageImpl<Post>(listPosts);
-        Mockito.when(postService.findAll(ArgumentMatchers.isA(Pageable.class))).thenReturn(listPostsPage);
-        String url ="/posts";
-        mockMvc.perform(get(url)).andExpect(status().isOk());
+
+
     }
 
-    @Disabled
     @Test
-    void create() {
-      Post post =  Post.builder()
+    void create() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/posts")
+                .content(asJsonString(arrangePostDtoIn()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title").value(EXAMPLE_TITLE))
+                .andExpect(jsonPath("$.text").value(EXAMPLE_TEXT));
+    }
+
+    private PostDtoIn arrangePostDtoIn() {
+        return PostDtoIn.builder()
                 .text(EXAMPLE_TEXT)
                 .title(EXAMPLE_TITLE)
-                .dateTime(LocalDateTime.now()).build();
-
+                .build();
     }
 
     @Test

@@ -20,14 +20,14 @@ import java.net.URI;
 public class PostController {
     private final PostService postService;
     @GetMapping
-    public ResponseEntity<Page<Post>> getPosts(Pageable pageable){
+    public ResponseEntity<Page<PostDtoOut>> getPosts(Pageable pageable){
        return ResponseEntity.ok().body(postService.findAll(pageable));
     }
 
     @PostMapping
-    public ResponseEntity<Post> create(@RequestBody Post postEntry){
+    public ResponseEntity<PostDtoOut> create(@RequestBody PostDtoIn postDtoIn){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/posts").toUriString());
-        return ResponseEntity.created(uri).body(postService.create(postEntry));
+        return ResponseEntity.created(uri).body(postService.create(postDtoIn));
     }
 
     @PutMapping

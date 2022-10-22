@@ -39,13 +39,4 @@ class PostRepositoryTest {
         assertThat(savedPost).isNotNull();
     }
 
-    @Test
-    void saveWorks() {
-        Post post = Post.builder()
-                .text(EXAMPLE_TEXT)
-                .title(EXAMPLE_TITLE)
-                .dateTime(LocalDateTime.now()).build();
-        Post saved = postRepository.save(post);
-        assertThat(saved).isNotNull();
-    }
 }

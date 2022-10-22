@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
@@ -24,7 +25,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class PostServiceImplTest {
 
-    public static final LocalDateTime POST_CREATION_DATE = LocalDateTime.of(2022, 10, 1, 2, 2, 2);
     private static final String EXAMPLE_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  ulpa qui officia deserunt mollit anim id est laborum";
     private static final String EXAMPLE_TITLE = "Super story";
     private static final long ID = 1L;
@@ -37,6 +37,8 @@ class PostServiceImplTest {
 
     @Test
     void shouldCallRepositoryFindAll() {
+        //given
+        when(postRepository.findAll(ArgumentMatchers.isA(Pageable.class))).thenReturn(Page.empty());
         //when
         postService.findAll(Pageable.ofSize(2));
         //then
@@ -46,11 +48,13 @@ class PostServiceImplTest {
     @Test
     void shouldCreatePost() {
         //given
-        Post post = arrangePost(null);
-        when(postRepository.save(post)).thenReturn(post);
+        PostDtoIn postDtoIn = arrangePostDtoIn(null);
+        Post post = Post.from(postDtoIn);
+        post.setDateTime(LocalDateTime.now());
+        when(postRepository.save(any(Post.class))).thenReturn(post);
 
         //when
-        Post savedPost = postService.create(post);
+        PostDtoOut savedPost = postService.create(postDtoIn);
 
         //then
         assertThat(savedPost).isNotNull();
@@ -88,13 +92,19 @@ class PostServiceImplTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenDeletingNotExistingPost(){
-       assertThrows(PostNotFoundException.class,()->postService.delete(ID));
+    void shouldThrowExceptionWhenDeletingNotExistingPost() {
+        assertThrows(PostNotFoundException.class, () -> postService.delete(ID));
     }
 
 
     private void assertPost(Post savedPost) {
-        assertThat(savedPost.getDateTime()).isEqualTo(POST_CREATION_DATE);
+        assertThat(savedPost.getDateTime()).isNotNull();
+        assertThat(savedPost.getText()).isEqualTo(EXAMPLE_TEXT);
+        assertThat(savedPost.getTitle()).isEqualTo(EXAMPLE_TITLE);
+    }
+
+    private void assertPost(PostDtoOut savedPost) {
+        assertThat(savedPost.getDateTime()).isNotNull();
         assertThat(savedPost.getText()).isEqualTo(EXAMPLE_TEXT);
         assertThat(savedPost.getTitle()).isEqualTo(EXAMPLE_TITLE);
     }
@@ -104,15 +114,14 @@ class PostServiceImplTest {
                 .id(id)
                 .title(EXAMPLE_TITLE)
                 .text(EXAMPLE_TEXT)
-                .dateTime(POST_CREATION_DATE)
                 .build();
     }
+
     private PostDtoIn arrangePostDtoIn(Long id) {
         return PostDtoIn.builder()
                 .id(id)
                 .title(EXAMPLE_TITLE)
                 .text(EXAMPLE_TEXT)
-                .dateTime(POST_CREATION_DATE)
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.BlogApp;
 
+import com.example.BlogApp.dto.input.PostDtoIn;
 import com.example.BlogApp.entity.Post;
 import com.example.BlogApp.service.PostService;
 import org.springframework.boot.CommandLineRunner;
@@ -20,9 +21,9 @@ public class BlogAppApplication {
 	@Bean
 	CommandLineRunner run(PostService postService) {
 		return args -> {
-			Post post = Post.builder().title("Title").text("Tekst").dateTime(LocalDateTime.now()).build();
-			Post post1 = Post.builder().title("Title1").text("Tekst1").dateTime(LocalDateTime.now()).build();
-			Post post2 = Post.builder().title("Title2").text("Tekst2").dateTime(LocalDateTime.now()).build();
+			PostDtoIn post = PostDtoIn.builder().title("Title").text("Tekst").build();
+			PostDtoIn post1 = PostDtoIn.builder().title("Title1").text("Tekst1").build();
+			PostDtoIn post2 = PostDtoIn.builder().title("Title2").text("Tekst2").build();
 			postService.create(post);
 			postService.create(post1);
 			postService.create(post2);

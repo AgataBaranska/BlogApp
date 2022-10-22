@@ -31,27 +31,23 @@ public class Post {
     @Basic
     private LocalDateTime dateTime;
 
-    static Post from(PostDtoIn postDtoIn) {
+   public static Post from(PostDtoIn postDtoIn) {
         return Post.builder()
-                .dateTime(postDtoIn.getDateTime())
                 .title(postDtoIn.getTitle())
                 .text(postDtoIn.getText()).build();
-
     }
-
-
-
-
 
     public void update(PostDtoIn postDtoIn) {
         text = postDtoIn.getText();
         title= postDtoIn.getTitle();
-        dateTime=postDtoIn.getDateTime();
     }
 
     public PostDtoOut toDtoOut() {
-        return PostDtoOut.builder().text(text)
+        return PostDtoOut.builder()
+                .id(id)
+                .text(text)
                 .title(title)
-                .dateTime(dateTime).build();
+                .dateTime(dateTime)
+                .build();
     }
 }

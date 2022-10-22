@@ -8,11 +8,15 @@ import com.example.BlogApp.exception.PostNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -22,14 +26,18 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
 
     @Override
-    public Page<Post> findAll(Pageable pageable) {
-        return postRepository.findAll(pageable);
+    public Page<PostDtoOut> findAll(Pageable pageable) {
+        Page<Post> posts = postRepository.findAll(pageable);
+        List<PostDtoOut> postsDtoOut = posts.stream().map(Post::toDtoOut).collect(Collectors.toList());
+        return new PageImpl<>(postsDtoOut);
     }
 
     @Transactional
     @Override
-    public Post create(Post postEntry) {
-        return postRepository.save(postEntry);
+    public PostDtoOut create(PostDtoIn postDtoIn) {
+        Post post = Post.from(postDtoIn);
+        post.setDateTime(LocalDateTime.now());
+        return postRepository.save(post).toDtoOut();
     }
 
     @Transactional

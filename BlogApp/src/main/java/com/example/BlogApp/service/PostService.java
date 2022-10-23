@@ -10,7 +10,4 @@ public interface PostService {
     PostDtoOut create(PostDtoIn PostDtoIn);
     void delete(Long id);
     PostDtoOut update(PostDtoIn postDtoIn);
-
-
-
 }

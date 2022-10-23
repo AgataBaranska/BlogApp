@@ -29,8 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 class PostControllerTest {
-    public static final LocalDateTime POST_CREATION_DATE = LocalDateTime.of(2022, 10, 1, 2, 2, 2);
-    public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON;
     private static final String EXAMPLE_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  ulpa qui officia deserunt mollit anim id est laborum";
     private static final String EXAMPLE_TITLE = "Super story";
     private static final long ID = 1L;
@@ -54,14 +52,6 @@ class PostControllerTest {
                 Arguments.of("Should return 0 elements on first page when pagination parameters are size=3 page=0", "3", "0", 3),
                 Arguments.of("Should return 1 elements on second page when pagination parameters are size=3 page=1", "3", "1", 1)
         );
-    }
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @BeforeEach
@@ -130,5 +120,13 @@ class PostControllerTest {
                 .text(EXAMPLE_TEXT)
                 .title(EXAMPLE_TITLE)
                 .build();
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

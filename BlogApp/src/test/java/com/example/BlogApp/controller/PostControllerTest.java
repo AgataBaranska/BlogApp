@@ -44,14 +44,6 @@ class PostControllerTest {
     @Autowired
     private PostRepository postRepository;
 
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @BeforeEach
    void setup() {
         PostDtoIn post = PostDtoIn.builder().title("Title").text("Tekst").build();
@@ -101,11 +93,12 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.text").value(EXAMPLE_TEXT));
     }
 
-    private PostDtoIn arrangePostDtoIn() {
-        return PostDtoIn.builder()
-                .text(EXAMPLE_TEXT)
-                .title(EXAMPLE_TITLE)
-                .build();
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -114,5 +107,12 @@ class PostControllerTest {
 
     @Test
     void delete() {
+    }
+
+    private PostDtoIn arrangePostDtoIn() {
+        return PostDtoIn.builder()
+                .text(EXAMPLE_TEXT)
+                .title(EXAMPLE_TITLE)
+                .build();
     }
 }

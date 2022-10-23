@@ -56,7 +56,6 @@ public class PostServiceImpl implements PostService {
         return updatedPost.toDtoOut();
     }
 
-
     private Post findPostById(Long id) {
         Optional<Post> post = postRepository.findById(id);
         return post.orElseThrow(() -> new PostNotFoundException(id));

@@ -2,7 +2,6 @@ package com.example.BlogApp.controller;
 
 import com.example.BlogApp.dto.input.PostDtoIn;
 import com.example.BlogApp.dto.output.PostDtoOut;
-import com.example.BlogApp.entity.Post;
 import com.example.BlogApp.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostDtoOut> create(@RequestBody PostDtoIn postDtoIn){
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/posts").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/posts/").toUriString());
         return ResponseEntity.created(uri).body(postService.create(postDtoIn));
     }
 

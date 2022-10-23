@@ -31,7 +31,7 @@ public class Post {
     @Basic
     private LocalDateTime dateTime;
 
-   public static Post from(PostDtoIn postDtoIn) {
+    public static Post from(PostDtoIn postDtoIn) {
         return Post.builder()
                 .title(postDtoIn.getTitle())
                 .text(postDtoIn.getText()).build();
@@ -39,7 +39,7 @@ public class Post {
 
     public void update(PostDtoIn postDtoIn) {
         text = postDtoIn.getText();
-        title= postDtoIn.getTitle();
+        title = postDtoIn.getTitle();
     }
 
     public PostDtoOut toDtoOut() {

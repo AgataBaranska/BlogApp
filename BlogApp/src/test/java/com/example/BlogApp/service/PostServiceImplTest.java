@@ -97,12 +97,6 @@ class PostServiceImplTest {
     }
 
 
-    private void assertPost(Post savedPost) {
-        assertThat(savedPost.getDateTime()).isNotNull();
-        assertThat(savedPost.getText()).isEqualTo(EXAMPLE_TEXT);
-        assertThat(savedPost.getTitle()).isEqualTo(EXAMPLE_TITLE);
-    }
-
     private void assertPost(PostDtoOut savedPost) {
         assertThat(savedPost.getDateTime()).isNotNull();
         assertThat(savedPost.getText()).isEqualTo(EXAMPLE_TEXT);
